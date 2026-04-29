@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Claude Code 패키지 파일
+*.skill
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 임시 파일
+_수정_체크리스트.md
