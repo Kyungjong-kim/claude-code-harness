@@ -296,7 +296,6 @@ UI·화면 변경이 포함된 경우, 완료 처리 전 반드시 아래 질문
 | **브랜치명** | `<타입>/<이슈번호>` | ✅ `task/1234` ❌ `task/issue#1234` |
 | **커밋 메시지** | `<타입>: [FE/BE/공통] 제목 #이슈번호` | `feat: [FE] 기능명 추가 #1234` |
 | **이슈·PR 제목** | `[FE/BE/공통] 제목` (타입 생략) | `[FE] 기능명 추가` |
-| **Co-Authored-By** | Claude Code 작업 시 필수 | `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>` |
 | **브랜치 기준점** | 항상 `[develop/main]`에서 생성 | `git checkout develop && git pull` 후 분기 |
 
 ---
@@ -323,6 +322,6 @@ UI·화면 변경이 포함된 경우, 완료 처리 전 반드시 아래 질문
 |------|------|
 | `/session-close` | 세션 종료 — HANDOFF 3종 갱신 |
 | `/project-fix` | QA·버그 이슈 → 서브이슈 생성 + 브랜치 준비 |
-| `/project-pr` | PR 생성 — 이슈 연결·Co-Authored-By 포함 |
+| `/project-pr` | PR 생성 — 이슈 연결 |
 | `/project-issue` | GitHub 이슈 인터랙티브 생성 |
 | `/document-review` | 문서 세트 시나리오 검증·이슈 수정 |
