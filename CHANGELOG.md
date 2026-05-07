@@ -1,11 +1,82 @@
 ---
 tags: [하네스, changelog]
-updated: 2026-04-28
+updated: 2026-04-30
 ---
 
 # CHANGELOG
 
 하네스 문서·스킬·스크립트의 주요 변경 이력.
+
+---
+
+## 2026-04-30 (37차 — v1.1.0 — 시뮬레이션 결과 보강 + 라이브러리 분리 결정)
+
+> 외부자 시뮬레이션(라이브러리 프로젝트 적용) 결과 발견된 6개 갭(G1·G2·G4·G5·G11·G12)을 본체에 반영. 라이브러리·CLI 등 다른 프로젝트 유형은 본체에 분기로 넣지 않고 별도 OSS(`design-harness`)로 분리하기로 결정.
+
+### 변경 — install.sh
+- (G1) 출력 깨짐 수정 — `→ 복사·갱신 $COPIED개` 의 `$COPIED개` 변수 확장 실패 → `${COPIED}개` 로 명시 (3곳)
+- (G2) `--local` 모드 완료 메시지의 검증 명령이 글로벌 경로(`~/.claude/skills/`)를 안내하던 것을 분기 처리 → `--local` 이면 `.claude/skills/` 안내
+
+### 변경 — skills/project-init/SKILL.md
+- (G4) Step 3 — 기존 `docs/` 자료가 있을 때 사용자에게 명시적으로 처리 옵션 묻기 (그대로 두기 / history 이관 / 직접 정리 / 기존 경로 유지). 자동 처리 금지
+- (G5) Step 1 — 모노레포 감지 로직에 `pnpm-workspace.yaml` 추가 (현재·상위 디렉터리 모두). 파악 항목 표에도 반영
+
+### 변경 — Claude Code/템플릿/git_워크플로우_템플릿.md
+- (G11) Q5 이슈 트래커 옵션 D "없음" 명시 (1인 OSS·소규모 운영). Q5=D면 `#이슈번호` 생략 + "이슈 번호 없이 커밋 금지" 규칙 비활성화
+- (G12) Q8 신규 — 영역 브래킷(`[FE]/[BE]/[공통]`) 사용 여부 옵션화. 단일 패키지면 `<타입>: 작업 내용` 형식만 사용
+
+### 결정 — 라이브러리·디자인시스템 OSS 분리
+- 외부자 시뮬레이션에서 발견한 라이브러리 분기 갭(G3·G6·G8·G9·G10)은 본체에 통합하지 않음
+- 별도 OSS `design-harness` (또는 추후 `cli-harness`)로 분리 — 도메인이 거의 겹치지 않고 본체 SKILL.md 부풀림 방지가 목적
+- 본체는 앱(FE·BE·풀스택) 중심으로 깔끔하게 유지
+
+---
+
+## 2026-04-29 (36차 — OSS 준비 — 마스킹·examples·문서 정비)
+
+### 추가 — examples/
+- examples/ 디렉토리 신설 — README + 01-initial(50줄) + 02-after-1-month(120줄) + 03-after-6-months(250줄, 본인 6개월 운영 사례 마스킹·일반화)
+
+### 추가 — README.md
+- "기대치 설정" 섹션 — M0/M1/M6 줄수 비교 표 + examples/ 진화 흐름 안내
+- "실행 흐름 예시" 3종 — install.sh / `/project-init` Q&A / `/daily-note` 콘솔 출력
+
+### 변경 — 운영_가이드/코딩_원칙.md
+- "하네스 STEP으로 풀어 쓰면" / "내 하네스로 풀어 쓰면" 섹션 4개 통째 제거
+- 4원칙 표의 "내 하네스 매핑" 컬럼 제거 + §출처 섹션 제거
+- 297줄 → 199줄 슬림화. 운영 실무는 examples/03 + 다른 운영_가이드 문서로 위임
+
+### 변경 — Claude Code/훅_스크립트_전문.md
+- pre-commit-doc-check.sh: BLOCKED_BRANCHES 환경변수 분리 (default `develop|main|master`, hooks-config.sh로 customize 가능)
+- hooks-config.sh source 위치를 STAGED 체크 직후로 이동 (보호 브랜치 체크 전)
+
+### 변경 — 운영_가이드/팀_훅_설정_공유.md
+- hooks-config.sh 예시에 BLOCKED_BRANCHES 안내 추가
+
+### 변경 — 운영_가이드/HANDOFF_유지_규칙.md
+- agent/ 문서 갱신 규칙에 안내 추가 (`/project-init` 자동 생성 + 템플릿 참조)
+
+### 변경 — 운영_가이드/세션_패턴_모음.md
+- 마스터 오케스트레이터 정의 footnote (`<프로젝트>-master` 명명 + 자동 생성 안내)
+
+### 변경 — Claude Code/개요.md
+- L67 "내 하네스 통합 운영 가이드" → "STEP 0~3 운영 매핑" 일반화
+
+### 변경 — 프롬프트/서브에이전트_호출_패턴.md
+- 머리말 "📌 내부 문서 / 제작자의" → "📌 참고 문서 / 운영자가" 일반화
+
+### 변경 — 설정_템플릿/settings.json_템플릿.md
+- VAULT_PATH 예시 "홍길동" → "<사용자명>" placeholder (2곳)
+
+### 수정 — 회사 색 마스킹 25건
+- 운영_가이드/코딩_원칙.md 16건 — 도메인 풀이 제거 + examples/03 참조로 갈음
+- Claude Code/트러블슈팅.md 7건 — 내부 프로젝트명 → 일반 경로명 치환
+- CHANGELOG.md 1건 (122줄) — `gena-dev` → `agent-service-dev`
+- personal-skills/skills/ 12개 SKILL — grep 0 클린 확인
+
+### 기타 — git 관리 시작
+- `Dev-Vault/code-harness/` git init + 첫 커밋 `a8f73b2` (68개 파일 tracked, main 브랜치)
+- GitHub private push는 보류 — review 후 안전하게 진행
 
 ---
 

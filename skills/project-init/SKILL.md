@@ -141,12 +141,16 @@ try:
   print('상위 workspaces:', ws if ws else '없음')
 except: pass
 " 2>/dev/null
+
+# pnpm 워크스페이스 감지 (workspaces 키와 별도 형태)
+[ -f pnpm-workspace.yaml ] && echo "pnpm-workspace.yaml 감지 — 모노레포 가능성"
+[ -f ../pnpm-workspace.yaml ] && echo "상위 pnpm-workspace.yaml 감지 — 모노레포 패키지 루트일 가능성"
 ```
 
 파악 항목:
 - **기존 하네스 구조** — `CLAUDE.md`·`.claude/`·`docs/` 존재 여부. 있으면 내용 파악 후 충돌 지점 메모
 - 언어·프레임워크 (Next.js / FastAPI / Go 등)
-- 모노레포 여부 (① 현재 `package.json` `workspaces` 키 ② `apps/`·`packages/` 하위 독립 패키지 ③ **패키지 루트 실행 시** 상위 `../package.json`의 `workspaces` 키)
+- 모노레포 여부 (① 현재 `package.json` `workspaces` 키 ② **`pnpm-workspace.yaml`** ③ `apps/`·`packages/` 하위 독립 패키지 ④ **패키지 루트 실행 시** 상위 `../package.json` `workspaces` 또는 `../pnpm-workspace.yaml`)
 - FE / BE / 풀스택 구분
 - 빌드·개발 서버 명령
 - 브랜치 전략 (git log 패턴으로 추론)
@@ -218,7 +222,22 @@ Q8. Playwright MCP UI 검증 에이전트가 필요한가요? (y/N)
 
 Q1 서비스명과 프로젝트 유형으로 경로를 결정한다.
 
-**기존 docs/ 구조가 있는 경우**: 기존 경로(예: `docs/status/`)와 신규 경로(`docs/<서비스명>/status/`)가 공존하면 CLAUDE.md 진입 문서 경로가 불일치한다. 기존 경로를 그대로 쓸지 신규 구조로 통일할지 사용자에게 먼저 확인한 뒤 진행한다.
+**기존 docs/ 구조가 있는 경우 — 사용자에게 명시적으로 묻는다:**
+
+기존 `docs/` 디렉토리에 파일·하위폴더가 있으면(예: 사전 작성한 plans 자료, 기존 경로 `docs/status/`), 신규 하네스 docs와 충돌·혼재 가능성이 있다. 자동 처리 금지. 다음 옵션을 사용자에게 제시:
+
+```
+docs/ 디렉토리에 기존 자료가 있습니다:
+[ls -la docs/ 결과 표시]
+
+어떻게 처리할까요?
+(a) 그대로 두고 docs/<서비스명>/ 만 추가 — 기존 자료와 신규 하네스 docs 공존 (가장 보수적)
+(b) docs/<서비스명>/history/ 로 이관 — 기존 자료를 회고 자산으로 보관
+(c) 직접 정리 후 진행 — 사용자가 수동 정리 후 알려주세요
+(d) 기존 경로(docs/status/ 등)를 그대로 쓰고 docs/<서비스명>/ 하위로 옮기지 않음 — CLAUDE.md 진입 경로를 그에 맞게 작성
+```
+
+사용자 응답 전까지 docs/ 디렉토리를 수정하지 않는다.
 
 **DOCS_BASE 결정 기준 (`$BASE` 변수):**
 

@@ -146,7 +146,7 @@ for skill_dir in "$SKILLS_SRC"/*/; do
     COPIED=$((COPIED + 1))
   fi
 done
-echo "  → 복사·갱신 $COPIED개 / 스킵 $SKIPPED개"
+echo "  → 복사·갱신 ${COPIED}개 / 스킵 ${SKIPPED}개"
 echo ""
 
 # ── 개인 생산성 스킬 복사 (옵션) ────────────────────────────
@@ -180,7 +180,7 @@ if [ "$INSTALL_PERSONAL" = "yes" ]; then
         COPIED_P=$((COPIED_P + 1))
       fi
     done
-    echo "  → 복사 $COPIED_P개 / 스킵 $SKIPPED_P개"
+    echo "  → 복사 ${COPIED_P}개 / 스킵 ${SKIPPED_P}개"
     echo ""
     echo "  개인 스킬 노트 경로 설정"
     echo "  Obsidian 등 마크다운 노트 저장 경로가 있으면 지금 바로 설정합니다."
@@ -355,7 +355,7 @@ if [ "$INSTALL_HOOKS" = "yes" ]; then
         HOOKS_COPIED=$((HOOKS_COPIED + 1))
       fi
     done
-    echo "  → 복사 $HOOKS_COPIED개 / 스킵 $HOOKS_SKIPPED개"
+    echo "  → 복사 ${HOOKS_COPIED}개 / 스킵 ${HOOKS_SKIPPED}개"
     echo "  ℹ 훅 스크립트는 git 명령을 내부적으로 사용합니다. git이 설치돼 있어야 정상 동작합니다."
 
     # settings.json hooks 섹션 자동 등록
@@ -423,9 +423,16 @@ echo "  설치된 스킬:"
 ls "$SKILLS_DST" | sed 's/^/    - /'
 echo ""
 echo "  설치 검증:"
-echo "    ls ~/.claude/skills/ | grep -E 'project-init|session-close'"
-if command -v python3 &>/dev/null; then
-  echo "    python3 -c \"import json,pathlib; d=json.loads(pathlib.Path('~/.claude/settings.json').expanduser().read_text()); print('model:', d.get('model','(없음)'))\""
+if [ "$LOCAL_INSTALL" = "yes" ]; then
+  echo "    ls .claude/skills/ | grep -E 'project-init|session-close'"
+  if command -v python3 &>/dev/null; then
+    echo "    python3 -c \"import json,pathlib; d=json.loads(pathlib.Path('.claude/settings.json').read_text()); print('harness dirs:', d.get('permissions',{}).get('additionalDirectories',[]))\""
+  fi
+else
+  echo "    ls ~/.claude/skills/ | grep -E 'project-init|session-close'"
+  if command -v python3 &>/dev/null; then
+    echo "    python3 -c \"import json,pathlib; d=json.loads(pathlib.Path('~/.claude/settings.json').expanduser().read_text()); print('model:', d.get('model','(없음)'))\""
+  fi
 fi
 echo ""
 if [ "$LOCAL_INSTALL" = "yes" ]; then
