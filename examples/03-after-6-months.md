@@ -1,14 +1,14 @@
 ---
 tags: [하네스, example, evolution, mature]
 phase: month-6
-generated: 2026-XX-XX
+generated: (예시 — 6개월 운영 후 시점)
 masking: based on real 6-month operation, names anonymized
 ---
 
 # Acme Platform — Claude Code 하네스 진입점
 
 > **6개월 운영 후.** 작업을 통제하는 하네스. 아래 규칙을 따르지 않으면 작업을 진행하지 않는다.
-> 이 문서의 모든 규칙은 **운영하며 발견된 결과물**이다. 부트스트랩 직후엔 이 중 90%가 없었다.
+> 이 문서의 모든 규칙은 **운영하며 발견된 결과물**이다. 부트스트랩 직후엔 이 중 대부분이 없었다.
 > 진화 흐름은 문서 하단 §진화 이력 참조.
 
 ---
@@ -71,8 +71,8 @@ masking: based on real 6-month operation, names anonymized
 | 커밋은 명시적 요청 시에만 | M0 | 사용자가 "커밋해줘" 전까지 보류 |
 | **admin-app: 컴포넌트에서 직접 axios 호출 금지** | M1 | 작업 중단 → `src/api/admin-api/` 레이어 경유로 수정 |
 | **user-portal: user-app 소스 미확인 상태에서 API 작업 금지** | M2 | 작업 중단 → `user-portal/docs/guide/user-app_소스_확인_절차.md` 실행 후 재개 |
-| **`[AgentService]` 보존 주석 임의 제거 금지** *(user-portal 전용)* | M4 | `user-portal/docs/guide/API_미확정_user-app_AgentService_병행.md` 확인 후만 허용 |
 | **QA/버그 이슈 URL·번호 수령 즉시 서브이슈 없이 작업 금지** | M3 | `/project-fix` 실행 → 서브이슈(Task) 생성 + 브랜치 준비 완료 후 작업 시작 |
+| **`[AgentService]` 보존 주석 임의 제거 금지** *(user-portal 전용)* | M4 | `user-portal/docs/guide/API_미확정_user-app_AgentService_병행.md` 확인 후만 허용 |
 | **QA 진행 중 추가 버그는 같은 브랜치에 계속 커밋** | M5 | 브랜치 전환 금지 — QA 완료 후 PR 머지 |
 
 > **규칙 우선순위**: 프로젝트별 CLAUDE.md(user-portal·admin-app)에 더 상세한 규칙이 있으면 그것이 우선. 충돌 시 **더 제한적인 것** 적용.
@@ -88,12 +88,12 @@ masking: based on real 6-month operation, names anonymized
 ```
 [규칙 준수 체크]
 - [ ] 기존 파일 구조 준수
-- [ ] API 레이어 패턴 준수                          (M1)
-- [ ] 상태 관리 방식 일치                            (M2)
 - [ ] 기존 코드 스타일 일치
+- [ ] API 레이어 패턴 준수                          (M1)
 - [ ] 변경된 모든 줄이 사용자 요청에 추적 가능 (Surgical Changes — 인접 코드·포맷팅 임의 정리 없음)
-- [ ] (admin-app) disabled 패턴 사용 — 조건부 언마운트 없음     (M3)
+- [ ] 빌드·타입·린트 통과
 - [ ] (user-portal) user-app 원본 소스 확인 완료              (M2)
+- [ ] (admin-app) disabled 패턴 사용 — 조건부 언마운트 없음     (M3)
 - [ ] (QA/버그 이슈) Task 타입 서브이슈 번호로 브랜치·커밋 작업 중인지 (M3)
 - [ ] 테스트 작성 여부 확인 (아래 기준 참고)
 ```
@@ -214,13 +214,13 @@ masking: based on real 6-month operation, names anonymized
 
 | 시점 | 신규 추가 | 누적 줄 수 |
 |---|---|---|
-| **M0 (부트스트랩)** | 4원칙 + STEP 0~3 골격 + 팀 프로세스 기본 | ~50줄 (`examples/01-initial.md`) |
-| **M1** | STEP 1: admin-app axios 직접 호출 금지 (사고 후) / STEP 3: 세션_노트 prepend (회고 회수 비용 발생 후) | ~120줄 (`examples/02-after-1-month.md`) |
-| **M2** | STEP 1: user-portal API 작업 시 user-app 소스 확인 강제 / STEP 3: HANDOFF.md Session Update 도입 / 0-A 도메인 표 4영역 정착 | ~160줄 |
-| **M3** | STEP 1: QA/버그 이슈 시 서브이슈 강제 (`/project-fix` 도입) / STEP 2: admin-app disabled 패턴·서브이슈 체크 추가 | ~180줄 |
-| **M4** | STEP 1: `[AgentService]` 보존 주석 사고 후 강제 규칙 추가 / STEP 3: admin-app 기술 문서 갱신 의무 | ~210줄 |
-| **M5** | 서브에이전트 호출 규칙 정착 (worktree 오버라이드·병렬 금지·test-writer 스코프) / QA 동일 브랜치 커밋 규칙 | ~240줄 |
-| **M6 (현재)** | 4원칙 본문 보강 (각 원칙별 1단락 설명) | ~250줄 |
+| **M0 (부트스트랩)** | 4원칙 + STEP 0~3 골격 + 팀 프로세스 기본 | ~95줄 (`examples/01-initial.md`) |
+| **M1** | STEP 1: admin-app axios 직접 호출 금지 (사고 후) / STEP 3: 세션_노트 prepend (회고 회수 비용 발생 후) | ~110줄 (`examples/02-after-1-month.md`) |
+| **M2** | STEP 1: user-portal API 작업 시 user-app 소스 확인 강제 / STEP 3: HANDOFF.md Session Update 도입 / 0-A 도메인 표 점진 확장 (~4영역) | ~140줄 |
+| **M3** | STEP 1: QA/버그 이슈 시 서브이슈 강제 (`/project-fix` 도입) / STEP 2: admin-app disabled 패턴·서브이슈 체크 추가 | ~170줄 |
+| **M4** | STEP 1: `[AgentService]` 보존 주석 사고 후 강제 규칙 추가 / STEP 3: admin-app 기술 문서 갱신 의무 | ~200줄 |
+| **M5** | 서브에이전트 호출 규칙 정착 (worktree 오버라이드·병렬 금지·test-writer 스코프) / QA 동일 브랜치 커밋 규칙 | ~225줄 |
+| **M6 (현재)** | 4원칙 본문 보강 (각 원칙별 1단락 설명) | ~230줄 |
 
 **부트스트랩 직후엔 이 모든 규칙이 없었다.** 매월 1~2건의 도메인 특정 함정·절차가 누적되어 현재에 이르렀다.
 
