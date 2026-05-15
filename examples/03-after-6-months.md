@@ -69,7 +69,7 @@ masking: based on real 6-month operation, names anonymized
 | 이슈 번호 없이 커밋 금지 | M0 | 이슈 먼저 생성 후 커밋 |
 | develop에 직접 커밋 금지 | M0 | 브랜치 분기 |
 | 커밋은 명시적 요청 시에만 | M0 | 사용자가 "커밋해줘" 전까지 보류 |
-| **admin-app: 컴포넌트에서 직접 axios 호출 금지** | M1 | 작업 중단 → `src/api/admin-api/` 레이어 경유로 수정 |
+| **admin-app: 컴포넌트에서 직접 axios 호출 금지** | M1 | 작업 중단 → `src/api/admin-service/` 레이어 경유로 수정 |
 | **user-portal: user-app 소스 미확인 상태에서 API 작업 금지** | M2 | 작업 중단 → `user-portal/docs/guide/user-app_소스_확인_절차.md` 실행 후 재개 |
 | **QA/버그 이슈 URL·번호 수령 즉시 서브이슈 없이 작업 금지** | M3 | `/project-fix` 실행 → 서브이슈(Task) 생성 + 브랜치 준비 완료 후 작업 시작 |
 | **`[AgentService]` 보존 주석 임의 제거 금지** *(user-portal 전용)* | M4 | `user-portal/docs/guide/API_미확정_user-app_AgentService_병행.md` 확인 후만 허용 |
@@ -220,8 +220,11 @@ masking: based on real 6-month operation, names anonymized
 | **M3** | STEP 1: QA/버그 이슈 시 서브이슈 강제 (`/project-fix` 도입) / STEP 2: admin-app disabled 패턴·서브이슈 체크 추가 | ~170줄 |
 | **M4** | STEP 1: `[AgentService]` 보존 주석 사고 후 강제 규칙 추가 / STEP 3: admin-app 기술 문서 갱신 의무 | ~200줄 |
 | **M5** | 서브에이전트 호출 규칙 정착 (worktree 오버라이드·병렬 금지·test-writer 스코프) / QA 동일 브랜치 커밋 규칙 | ~225줄 |
-| **M6 (현재)** | 4원칙 본문 보강 (각 원칙별 1단락 설명) | ~230줄 |
+| **M6** | 4원칙 본문 보강 (각 원칙별 1단락 설명) | ~230줄 |
+| **M7 (현재) — 다이어트 단계** | 공통 패턴 외부 분리 (FE/BE 진입 베이스·서브에이전트 룰·팀 프로세스를 별도 base 문서로) + 자식 CLAUDE.md 압축 + caveman 압축 프롬프트 도입 → 매 세션 진입 토큰 ~40% 절감 | 루트 ~170줄 + 베이스 문서 분리 |
 
 **부트스트랩 직후엔 이 모든 규칙이 없었다.** 매월 1~2건의 도메인 특정 함정·절차가 누적되어 현재에 이르렀다.
 
 이 문서를 그대로 새 프로젝트에 복사해도 의미 없다 — 그 프로젝트만의 함정은 그 프로젝트가 운영되며 발견되어야 한다. **하네스가 주는 것은 *발견을 기록하는 구조*이지 *발견된 내용 자체*가 아니다.**
+
+> **M7 다이어트 인사이트**: 약 200줄 누적 시점부터 세션 진입 토큰이 부담된다. 이 시점에 공통 패턴(STEP 0~3 골격·서브에이전트 룰·팀 프로세스)을 별도 base 문서로 분리하고, 루트 CLAUDE.md는 진입 체크리스트·도메인 표·금지 규칙만 남긴다. 분리한 base 문서는 자동 로드 대상이 아니라 `🔴 최우선 액션`으로 명시적 Read 시점에 컨텍스트 진입. 자식 CLAUDE.md(모노레포·멀티앱) 상단에도 동일 패턴 적용. 부가로 응답 측 토큰은 caveman 압축 프롬프트로 추가 절감 (`프롬프트/caveman_프롬프트.md`).
