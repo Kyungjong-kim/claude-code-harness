@@ -154,10 +154,10 @@ masking: based on real 6-month operation, names anonymized
 
 ## 서브에이전트 호출 규칙
 
-> **이 프로젝트 오버라이드** — 글로벌 기본을 이 프로젝트 한정으로 덮어쓴다.  (M5)
+> **이 프로젝트 정책** — 글로벌 기본 위에 프로젝트 한정 가드를 얹는다.  (M5)
 >
-> 1. **isolation: worktree 사용 자제** — 글로벌 기본은 "코드 변경 에이전트 = worktree 필수"이지만 이 프로젝트에서는 명시적 요청 전까지 세션에서 직접 처리.
-> 2. **병렬 호출 금지** — 명시적 병렬 요청 없으면 서브에이전트 순차 호출만 허용.
+> 1. **isolation: worktree 적극 사용** — 코드 변경 포함 모든 에이전트 호출은 `isolation: "worktree"` 옵션 사용. 병렬 이슈 처리·파일 충돌 회피를 위해 글로벌 기본으로 채택. 단, 프로젝트별 feedback 메모리에 worktree 제한 명시 시 그것을 우선.
+> 2. **병렬 호출 명시 요청 시만** — 기본은 순차. 사용자가 "병렬"·"parallel" 등 명시한 경우에만 단일 메시지에 다중 Agent tool block 사용.
 > 3. **test-writer 호출 시** — 프롬프트에 "기존 소스 파일 수정 금지, 테스트 파일만 작성" 명시 필수.
 
 ### 단순 작업 → 프로젝트 dev 에이전트 직접 호출
@@ -219,7 +219,7 @@ masking: based on real 6-month operation, names anonymized
 | **M2** | STEP 1: user-portal API 작업 시 user-app 소스 확인 강제 / STEP 3: HANDOFF.md Session Update 도입 / 0-A 도메인 표 점진 확장 (~4영역) | ~140줄 |
 | **M3** | STEP 1: QA/버그 이슈 시 서브이슈 강제 (`/project-fix` 도입) / STEP 2: admin-app disabled 패턴·서브이슈 체크 추가 | ~170줄 |
 | **M4** | STEP 1: `[AgentService]` 보존 주석 사고 후 강제 규칙 추가 / STEP 3: admin-app 기술 문서 갱신 의무 | ~200줄 |
-| **M5** | 서브에이전트 호출 규칙 정착 (worktree 오버라이드·병렬 금지·test-writer 스코프) / QA 동일 브랜치 커밋 규칙 | ~225줄 |
+| **M5** | 서브에이전트 호출 규칙 정착 (worktree 기본·병렬은 명시 요청 시만·test-writer 스코프) / QA 동일 브랜치 커밋 규칙 | ~225줄 |
 | **M6** | 4원칙 본문 보강 (각 원칙별 1단락 설명) | ~230줄 |
 | **M7 (현재) — 다이어트 단계** | 공통 패턴 외부 분리 (FE/BE 진입 베이스·서브에이전트 룰·팀 프로세스를 별도 base 문서로) + 자식 CLAUDE.md 압축 + caveman 압축 프롬프트 도입 → 매 세션 진입 토큰 ~40% 절감 | 루트 ~170줄 + 베이스 문서 분리 |
 

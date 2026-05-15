@@ -1,11 +1,45 @@
 ---
 tags: [하네스, changelog]
-updated: 2026-04-30
+updated: 2026-05-15
 ---
 
 # CHANGELOG
 
 하네스 문서·스킬·스크립트의 주요 변경 이력.
+
+---
+
+## 2026-05-15 (38차 — 다이어트 + caveman 압축 프롬프트 + author 정책)
+
+### 신규 — 프롬프트/caveman_프롬프트.md
+- plugin·hook 없이 동작하는 압축 모드 단일 프롬프트 (129줄)
+- 적용 3가지: CLAUDE.md 상단 / SessionStart hook / 슬래시 커맨드
+- 강도 lite·full·ultra 3단계. 한국어·영어 예시 포함
+
+### 변경 — 공용_하네스_구축_가이드.md (다이어트)
+- 393 → 275줄 (-30%) 진입 가이드 슬림화
+- "스킬 업데이트 규칙" → `운영_가이드/스킬_업데이트_규칙.md` 신규 분리 (32줄)
+- "수동 구축 (install.sh 없이)" → `운영_가이드/수동_구축_절차.md` 신규 분리 (99줄)
+- 분리 문서 상단 🔴 진입 가이드 참조 헤더 명시
+- 관련 문서 섹션에 caveman·수동구축·스킬업데이트 3종 링크 추가
+
+### 신규 — 운영_가이드/수동_구축_절차.md
+- install.sh 사용 불가 환경의 Phase 1~4 수동 부트스트랩 절차
+
+### 신규 — 운영_가이드/스킬_업데이트_규칙.md
+- 하네스 소스 ↔ ~/.claude/skills/ 양방향 동기화 + 주의사항
+
+### 변경 — examples/03-after-6-months.md
+- 진화 표 M7 행 추가 — 약 200줄 누적 시점 공통 패턴 외부 분리 + 자식 CLAUDE.md 압축 + caveman 압축 프롬프트
+- 본문 말미 "M7 다이어트 인사이트" 단락 추가
+- M5 narrative 본인 실제 경험과 일치하도록 수정 — "worktree 사용 자제" → "worktree 적극 사용 (병렬 이슈 처리·파일 충돌 회피)"
+- M5 진화 표 행 동기화
+- 어댑터 디렉터리 명명 일관화 — `src/api/admin-service/`로 통일 (`admin-app`(FE) ↔ `admin-service`(BE) 매칭)
+
+### 변경 — CONTRIBUTING.md
+- 커밋 author·식별 정보 정책 섹션 추가
+- 회사 이메일 사용 금지 명시
+- 메인테이너용 git 멀티계정 설정 + SSH alias 분리 가이드
 
 ---
 
@@ -68,10 +102,10 @@ updated: 2026-04-30
 ### 변경 — 설정_템플릿/settings.json_템플릿.md
 - VAULT_PATH 예시 "홍길동" → "<사용자명>" placeholder (2곳)
 
-### 수정 — 회사 색 마스킹 25건
+### 수정 — 내부 식별자·도메인 풀이 마스킹 25건
 - 운영_가이드/코딩_원칙.md 16건 — 도메인 풀이 제거 + examples/03 참조로 갈음
 - Claude Code/트러블슈팅.md 7건 — 내부 프로젝트명 → 일반 경로명 치환
-- CHANGELOG.md 1건 (122줄) — `gena-dev` → `agent-service-dev`
+- CHANGELOG.md 1건 (122줄) — 내부 에이전트 명명 → `agent-service-dev` 일반화
 - personal-skills/skills/ 12개 SKILL — grep 0 클린 확인
 
 ### 기타 — git 관리 시작
