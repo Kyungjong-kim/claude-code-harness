@@ -1,11 +1,54 @@
 ---
 tags: [하네스, changelog]
-updated: 2026-05-15
+updated: 2026-06-18
 ---
 
 # CHANGELOG
 
 하네스 문서·스킬·스크립트의 주요 변경 이력.
+
+---
+
+## 2026-06-18 (40차 — Windows 네이티브 설치기 install.ps1, v1.3.0)
+
+> Windows native(비 WSL) 환경에서 `install.sh`가 동작하지 않는 문제 해소. PowerShell 포팅 추가.
+
+### 신규 — install.ps1 (Windows PowerShell 부트스트랩)
+- `install.sh`의 5단계(의존성·스킬·개인스킬·settings.json·훅)를 PowerShell 5.1+로 1:1 포팅.
+- 플래그: `-Local` `-Personal` `-Hooks` `-Force` `-Dir` `-NotePath` `-Yes`(비대화형).
+- **Windows 함정 회피:**
+  - `python3` → Windows Store 스텁(`WindowsApps`, exit 49)이라 실제 실행 불가. `Find-RealPython`이 스텁을 걸러 실제 `python`/`py -3` 탐지.
+  - `cp`/`rm` 대신 `robocopy /MIR` — Copy-Item 중첩·Remove-Item 가드 회피, 디렉터리 정확 미러.
+  - python JSON 편집을 stdin 파이프 대신 임시 UTF-8 `.py`로 실행 + 인자 전달 → 한글 경로 손상·빈 인자 드롭 방지, `settings.json` 한글 그대로 보존.
+  - 콘솔/파이썬 UTF-8 강제(`PYTHONUTF8`)로 한글 출력 깨짐 방지.
+- 훅 등록 command는 `bash ...` 유지 — 발동하려면 `PATH`에 Git Bash 필요(README 명시).
+
+### 변경
+- README.md·README.ko.md 지원 플랫폼 표: Windows (native) ✗ → ✅ + Windows 부트스트랩/업그레이드 섹션 추가
+- README 개인 스킬 표에 `/post-illustrate` 추가
+- VERSION 1.2.0 → 1.3.0
+
+---
+
+## 2026-06-16 (39차 — 자가검증·릴리스 스킬 3종 추가, v1.2.0)
+
+> 운영 하네스에서 검증된 개선 패턴을 공용 하네스로 이식.
+
+### 신규 — skills/harness-audit
+- 하네스 끊긴 배선 스캔: 삭제·리네임된 에이전트/스킬/문서 참조, 없는 경로, 고아 에이전트 탐지.
+- 읽기 전용. 모든 쉘(bash·zsh·sh) 호환(`while IFS= read -r` 파이프, process substitution·`for x in $var` 미사용).
+
+### 신규 — skills/doc-drift
+- 기능 문서(FE_*.md·BE_*.md)가 참조 source보다 노후됐는지 git 이력 비교로 탐지.
+- 모노레포 패키지 prefix 해소(`resolve()`), 임시파일 redirect로 POSIX 호환.
+
+### 신규 — skills/release-notes
+- 마일스톤 배포 내역 → 사용자-대면 큐레이션 → 요약 이슈 + 배포 공지 메시지(부모→하위 불렛+이슈번호).
+- 공지 자동 게시 없이 복사용 텍스트만 출력.
+
+### 변경
+- README.md·README.ko.md Skills 표에 3종 추가
+- VERSION 1.1.0 → 1.2.0
 
 ---
 

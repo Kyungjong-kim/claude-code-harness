@@ -3,7 +3,7 @@
 A skill · document · configuration package for applying Claude Code to any software project.
 
 > For Korean documentation see [README.ko.md](./README.ko.md).
-> Sister project for design systems / component libraries: [design-harness](https://github.com/kyungjongKim/design-harness).
+> Sister project for design systems / component libraries: [design-harness](https://github.com/Kyungjong-kim/design-harness).
 
 ---
 
@@ -14,7 +14,7 @@ A skill · document · configuration package for applying Claude Code to any sof
 | macOS 10.15+ | ✅ | Fully tested |
 | Linux (Ubuntu 20.04+) | ✅ | bash 4.0+ required |
 | Windows (WSL2) | ✅ | Ubuntu 20.04+ on WSL2 recommended |
-| Windows (native) | ✗ | bash scripts not supported |
+| Windows (native) | ✅ | PowerShell 5.1+ via `install.ps1` (real `python` + Git Bash for hooks) |
 
 ---
 
@@ -41,11 +41,24 @@ workspace/
 
 ### 2. Bootstrap
 
+**macOS / Linux / WSL2 (bash):**
+
 ```bash
 bash harness/install.sh              # project workflow skills (always)
 bash harness/install.sh --personal   # + personal productivity skills
 bash harness/install.sh --hooks      # + FE doc-check git hooks
 ```
+
+**Windows native (PowerShell):**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File harness\install.ps1            # project workflow skills (always)
+powershell -ExecutionPolicy Bypass -File harness\install.ps1 -Personal  # + personal productivity skills
+powershell -ExecutionPolicy Bypass -File harness\install.ps1 -Hooks     # + FE doc-check git hooks
+powershell -ExecutionPolicy Bypass -File harness\install.ps1 -Yes       # non-interactive (accept defaults)
+```
+
+> `install.ps1` is a native port of `install.sh`: it detects the real `python` (skipping the Windows Store `python3` stub), uses `robocopy` instead of `cp`/`rm`, and keeps Korean paths intact in `settings.json`. Hooks register a `bash ...` command, so Git Bash must be on `PATH` for them to fire.
 
 GitHub skills (`/project-fix`, `/project-pr`, `/project-issue`) require GitHub CLI auth:
 
@@ -82,7 +95,12 @@ bash harness/install.sh --force          # overwrite project skills
 bash harness/install.sh --force --hooks  # + hooks
 ```
 
-Personal skills (`/daily-note`, `/standup`, etc.) are never overwritten by `--force`.
+```powershell
+powershell -ExecutionPolicy Bypass -File harness\install.ps1 -Force         # overwrite project skills
+powershell -ExecutionPolicy Bypass -File harness\install.ps1 -Force -Hooks  # + hooks
+```
+
+Personal skills (`/daily-note`, `/standup`, etc.) are never overwritten by `--force` / `-Force`.
 
 ---
 
@@ -98,6 +116,9 @@ Personal skills (`/daily-note`, `/standup`, etc.) are never overwritten by `--fo
 | `/project-pr` | PR with issue link + Co-Authored-By |
 | `/session-close` | End-of-session HANDOFF update (3 files in order) |
 | `/document-review` | Scenario-based doc structure & completeness audit |
+| `/harness-audit` | Scan harness for dangling agent/skill/doc references |
+| `/doc-drift` | Detect feature docs gone stale vs their referenced source |
+| `/release-notes` | Milestone release notes → summary issue + deploy announcement |
 
 ### Personal productivity (optional, `--personal`)
 
@@ -109,6 +130,7 @@ Personal skills (`/daily-note`, `/standup`, etc.) are never overwritten by `--fo
 | `/til` | Today I Learned entry |
 | `/weekly-retro` | Weekly KPT retrospective |
 | `/weekly-meeting-update` | Weekly meeting draft |
+| `/post-illustrate` | Generate image manifest for a blog post |
 
 ---
 

@@ -19,7 +19,7 @@ Claude Code를 프로젝트에 적용하기 위한 스킬·문서·설정 패키
 | **macOS 10.15+** | ✅ | 완전 지원 · 검증됨 |
 | **Linux (Ubuntu 20.04+)** | ✅ | bash 4.0+ 필요 · 검증됨 |
 | **Windows (WSL2)** | ✅ | Ubuntu 20.04+ on WSL2 권장 |
-| **Windows (native)** | ✗ | bash 스크립트 미지원 |
+| **Windows (native)** | ✅ | PowerShell 5.1+ `install.ps1` (실제 `python` + 훅은 Git Bash 필요) |
 
 ---
 
@@ -66,6 +66,16 @@ FE/풀스택 프로젝트에서 훅 스크립트(FE 문서 자동 감지)를 설
 ```bash
 bash 하네스/install.sh --hooks
 ```
+
+**Windows native (PowerShell)** — bash 대신 `install.ps1` 사용:
+```powershell
+powershell -ExecutionPolicy Bypass -File 하네스\install.ps1            # 프로젝트 스킬 (항상)
+powershell -ExecutionPolicy Bypass -File 하네스\install.ps1 -Personal  # + 개인 생산성 스킬
+powershell -ExecutionPolicy Bypass -File 하네스\install.ps1 -Hooks     # + FE 문서 체크 훅
+powershell -ExecutionPolicy Bypass -File 하네스\install.ps1 -Yes       # 비대화형 (기본값 진행)
+```
+
+> `install.ps1`은 `install.sh`의 네이티브 포팅 — 실제 `python` 탐지(Windows Store `python3` 스텁 회피), `cp`/`rm` 대신 `robocopy`, `settings.json`의 한글 경로 보존. 훅 command는 `bash ...`라 발동하려면 `PATH`에 Git Bash가 있어야 한다.
 
 > **훅 설치 후**: 이후 `/project-init` 실행 시 소스 경로를 자동 분석해
 > `.claude/hooks-config.sh`를 생성한다. 수동 조정이 필요하면 `Claude Code/훅_스크립트_전문.md` 참조.
@@ -115,6 +125,12 @@ bash 하네스/install.sh --force
 
 # 훅까지 함께 강제 업그레이드
 bash 하네스/install.sh --force --hooks
+```
+
+Windows native (PowerShell):
+```powershell
+powershell -ExecutionPolicy Bypass -File 하네스\install.ps1 -Force         # 프로젝트 스킬 강제 업그레이드
+powershell -ExecutionPolicy Bypass -File 하네스\install.ps1 -Force -Hooks  # + 훅
 ```
 
 > `--force` 없이 재실행하면 이미 존재하는 스킬·훅을 스킵한다.
@@ -272,7 +288,8 @@ Claude:
 
 ```
 하네스/
-  install.sh           부트스트랩 스크립트
+  install.sh           부트스트랩 스크립트 (macOS·Linux·WSL2)
+  install.ps1          부트스트랩 스크립트 (Windows native · PowerShell)
   README.md            영문 README (진입점)
   README.ko.md         이 파일 — 한국어 전체 문서
   skills/              프로젝트 워크플로우 스킬 (항상 설치)
@@ -301,6 +318,9 @@ Claude:
 | `/project-pr` | PR 생성 (이슈 연결·Co-Authored-By 포함) |
 | `/session-close` | 세션 종료 — HANDOFF 갱신 |
 | `/document-review` | 문서 구조·완전성 검증 |
+| `/harness-audit` | 하네스 끊긴 배선(삭제·리네임된 에이전트/스킬/문서 참조) 스캔 |
+| `/doc-drift` | 기능 문서(FE_*.md·BE_*.md)가 참조 source보다 노후됐는지 탐지 |
+| `/release-notes` | 마일스톤 배포 내역 → 요약 이슈 + 배포 공지 메시지 |
 
 ### 개인 생산성 (선택 설치)
 
@@ -312,6 +332,7 @@ Claude:
 | `/til` | TIL 정리 |
 | `/weekly-retro` | 주간 KPT 회고 |
 | `/weekly-meeting-update` | 주간회의록 초안 생성 |
+| `/post-illustrate` | 블로그 글 이미지 매니페스트 생성 |
 
 ---
 
