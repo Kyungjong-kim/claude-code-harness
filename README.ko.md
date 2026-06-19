@@ -19,7 +19,7 @@ Claude Code를 프로젝트에 적용하기 위한 스킬·문서·설정 패키
 | **macOS 10.15+** | ✅ | 완전 지원 · 검증됨 |
 | **Linux (Ubuntu 20.04+)** | ✅ | bash 4.0+ 필요 · 검증됨 |
 | **Windows (WSL2)** | ✅ | Ubuntu 20.04+ on WSL2 권장 |
-| **Windows (native)** | ✅ | PowerShell 5.1+ `install.ps1` (실제 `python` + 훅은 Git Bash 필요) |
+| **Windows (native)** | 🧪 | 실험적 — `install.ps1` 포팅 완료, 실환경 검증 진행 중. PowerShell 5.1+ (실제 `python` + 훅은 Git Bash 필요) |
 
 ---
 
@@ -76,6 +76,8 @@ powershell -ExecutionPolicy Bypass -File 하네스\install.ps1 -Yes       # 비�
 ```
 
 > `install.ps1`은 `install.sh`의 네이티브 포팅 — 실제 `python` 탐지(Windows Store `python3` 스텁 회피), `cp`/`rm` 대신 `robocopy`, `settings.json`의 한글 경로 보존. 훅 command는 `bash ...`라 발동하려면 `PATH`에 Git Bash가 있어야 한다.
+>
+> ⚠️ native Windows 지원은 **실험적**입니다 — 임시 디렉터리 dry run으로 확인했으나 실환경 검증은 진행 중. 완전 검증된 경로가 필요하면 WSL2를 사용하세요.
 
 > **훅 설치 후**: 이후 `/project-init` 실행 시 소스 경로를 자동 분석해
 > `.claude/hooks-config.sh`를 생성한다. 수동 조정이 필요하면 `Claude Code/훅_스크립트_전문.md` 참조.

@@ -14,7 +14,7 @@ A skill · document · configuration package for applying Claude Code to any sof
 | macOS 10.15+ | ✅ | Fully tested |
 | Linux (Ubuntu 20.04+) | ✅ | bash 4.0+ required |
 | Windows (WSL2) | ✅ | Ubuntu 20.04+ on WSL2 recommended |
-| Windows (native) | ✅ | PowerShell 5.1+ via `install.ps1` (real `python` + Git Bash for hooks) |
+| Windows (native) | 🧪 | Experimental — `install.ps1` ported; real-environment verification in progress. PowerShell 5.1+ (real `python` + Git Bash for hooks) |
 
 ---
 
@@ -59,6 +59,8 @@ powershell -ExecutionPolicy Bypass -File harness\install.ps1 -Yes       # non-in
 ```
 
 > `install.ps1` is a native port of `install.sh`: it detects the real `python` (skipping the Windows Store `python3` stub), uses `robocopy` instead of `cp`/`rm`, and keeps Korean paths intact in `settings.json`. Hooks register a `bash ...` command, so Git Bash must be on `PATH` for them to fire.
+>
+> ⚠️ Native Windows support is **experimental**: verified in a temp-directory dry run, but full real-environment validation is still in progress. Use WSL2 if you need a fully tested path today.
 
 GitHub skills (`/project-fix`, `/project-pr`, `/project-issue`) require GitHub CLI auth:
 
