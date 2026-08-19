@@ -16,24 +16,17 @@ description: |
 ## Step 1 — 이번 주 데이터 수집
 
 ```bash
-# 노트 경로 설정 확인 — 미설정이면 중단
-if echo "<개인_노트_경로>" | grep -q '<개인_노트_경로>'; then
-  echo "⚠ [설정 필요] ~/.claude/skills/weekly-retro/SKILL.md 에서 <개인_노트_경로>를 실제 경로로 교체하세요."
-  echo "  교체 후 스킬을 다시 실행해주세요. (참조: README.md '개인 스킬에 노트 경로 연결' 섹션)"
-  exit 1
-fi
-
 # 이번 주 git 커밋 (월~오늘)
 git log --oneline --since="last monday 00:00" \
   --author="$(git config user.name)" 2>/dev/null
 
 # 이번 주 TIL 파일 목록
 THIS_WEEK_START=$(date -v-mon +%Y-%m-%d 2>/dev/null || date -d "last monday" +%Y-%m-%d)
-find <개인_노트_경로>/TIL \
-  -name "*.md" -newer "<개인_노트_경로>/TIL" 2>/dev/null | sort
+find <개인_노트_경로>/개인/TIL \
+  -name "*.md" -newer "<개인_노트_경로>/개인/TIL" 2>/dev/null | sort
 
 # 이번 주 일일노트 파일 목록
-find <개인_노트_경로>/일일노트 \
+find <개인_노트_경로>/개인/일일노트 \
   -name "*.md" | sort | tail -7
 ```
 

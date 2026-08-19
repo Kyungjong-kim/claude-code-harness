@@ -14,15 +14,6 @@ description: |
 
 ## Step 1 — 모드 판별
 
-```bash
-# 노트 경로 설정 확인 — 미설정이면 중단
-if echo "<개인_노트_경로>" | grep -q '<개인_노트_경로>'; then
-  echo "⚠ [설정 필요] ~/.claude/skills/daily-note/SKILL.md 에서 <개인_노트_경로>를 실제 경로로 교체하세요."
-  echo "  교체 후 스킬을 다시 실행해주세요. (참조: README.md '개인 스킬에 노트 경로 연결' 섹션)"
-  exit 1
-fi
-```
-
 사용자 입력에서 모드를 결정한다.
 
 | 입력 키워드 | 모드 |
@@ -40,6 +31,7 @@ fi
 2. 없으면 아래 순서로 할 일 목록을 수집한다:
    - 현재 디렉토리에 `HANDOFF_NOW.md`가 있으면 §2 다음 작업 항목 읽기
    - 어제 일일노트(`YYYY-MM-DD.md`)가 있으면 "내일로 넘기는 것" 섹션 읽기
+   - `<개인_노트_경로>/career/weekly-tasks.md`가 있으면 오늘 날짜(`### M/D` 형태) 헤더 아래의 체크박스 항목 읽기 → "사이드 (Career Roadmap)" 섹션 pre-fill
 3. 수집한 항목으로 아래 템플릿을 채워 파일 저장
 
 ```markdown
@@ -54,6 +46,11 @@ date: YYYY-MM-DD
 
 - [ ] <HANDOFF §2 또는 어제 이월 항목>
 - [ ] 
+
+## 사이드 (Career Roadmap)
+
+<!-- weekly-tasks.md 오늘 날짜 항목 자동 pre-fill. 없으면 이 섹션 생략 -->
+- [ ] <career/weekly-tasks.md 오늘 항목>
 
 ## 작업 로그
 
