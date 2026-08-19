@@ -16,32 +16,25 @@ description: |
 ## Step 1 — 어제 작업 수집
 
 ```bash
-# 노트 경로 설정 확인 — 미설정이면 중단
-if echo "<개인_노트_경로>" | grep -q '<개인_노트_경로>'; then
-  echo "⚠ [설정 필요] ~/.claude/skills/standup/SKILL.md 에서 <개인_노트_경로>를 실제 경로로 교체하세요."
-  echo "  교체 후 스킬을 다시 실행해주세요. (참조: README.md '개인 스킬에 노트 경로 연결' 섹션)"
-  exit 1
-fi
-
 # 어제 커밋 목록
 git log --oneline --after="yesterday 00:00" --before="today 00:00" \
   --author="$(git config user.name)" 2>/dev/null
 
 # 어제 일일노트에서 "내일로 넘기는 것" 섹션 읽기
 YESTERDAY=$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d "yesterday" +%Y-%m-%d)
-cat "<개인_노트_경로>/일일노트/${YESTERDAY}.md" 2>/dev/null
+cat "<개인_노트_경로>/개인/일일노트/${YESTERDAY}.md" 2>/dev/null
 ```
 
 ## Step 2 — 오늘 할 일 수집
 
 ```bash
 TODAY=$(date +%Y-%m-%d)
-cat "<개인_노트_경로>/일일노트/${TODAY}.md" 2>/dev/null
+cat "<개인_노트_경로>/개인/일일노트/${TODAY}.md" 2>/dev/null
 ```
 
 오늘 일일노트가 없으면 HANDOFF_NOW.md §2에서 다음 작업 읽기:
 ```bash
-find . -maxdepth 5 -name "HANDOFF_NOW.md" -not -path "*/node_modules/*" 2>/dev/null | head -1 | xargs grep -A 10 "§2\|다음 작업" 2>/dev/null
+find . -name "HANDOFF_NOW.md" -not -path "*/node_modules/*" 2>/dev/null | head -1 | xargs grep -A 10 "§2\|다음 작업" 2>/dev/null
 ```
 
 ## Step 3 — 블로커 확인
